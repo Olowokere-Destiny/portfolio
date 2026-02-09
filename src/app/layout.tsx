@@ -30,7 +30,7 @@ export const metadata: Metadata = {
         height: 630,
       },
     ],
-    description: "Destiny Olowokere: Frontend Developer",
+    description: "Destiny Olowokere: Fullstack Developer",
   },
 };
 
