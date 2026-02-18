@@ -14,6 +14,7 @@ interface Props {
   liveUrl: string;
   hasDemoVideo?: boolean;
   demoVideoUrl?: string;
+  aiTag?: boolean;
 }
 const SingleProject = ({
   image,
@@ -23,6 +24,7 @@ const SingleProject = ({
   liveUrl,
   hasDemoVideo,
   demoVideoUrl,
+  aiTag,
 }: Props) => {
   const ref = useRef(null);
   const inView = useInView(ref, { margin: "-100px" });
@@ -52,34 +54,32 @@ const SingleProject = ({
         className="w-full flex lg:flex-row flex-col gap-8 justify-center lg:justify-between items-center my-12 bg-white/10 p-4 rounded-3xl"
       >
         <div className="w-full lg:w-1/2">
-          {
-            hasDemoVideo && demoVideoUrl ? (
-              <div
-                data-testid="video-demo"
-                className="w-full h-full rounded-2xl overflow-hidden"
+          {hasDemoVideo && demoVideoUrl ? (
+            <div
+              data-testid="video-demo"
+              className="w-full h-full rounded-2xl overflow-hidden"
+            >
+              <video
+                controls
+                controlsList="nodownload"
+                playsInline
+                className="w-full h-full"
               >
-                <video
-                  controls
-                  controlsList="nodownload"
-                  playsInline
-                  className="w-full h-full"
-                >
-                  <source src={demoVideoUrl} type="video/mp4" />
-                </video>
-              </div>
-            ) : (
-              image && (
-                <Image
-                  data-testid="photo-demo"
-                  src={image}
-                  width={500}
-                  height={500}
-                  className="w-full rounded-2xl"
-                  alt="Project Image"
-                />
-              )
+                <source src={demoVideoUrl} type="video/mp4" />
+              </video>
+            </div>
+          ) : (
+            image && (
+              <Image
+                data-testid="photo-demo"
+                src={image}
+                width={500}
+                height={500}
+                className="w-full rounded-2xl"
+                alt="Project Image"
+              />
             )
-          }
+          )}
         </div>
         <m.div
           className="w-full lg:w-1/2"
@@ -119,6 +119,11 @@ const SingleProject = ({
               <RxExternalLink className="text-[1rem]" />
             </Link>
           </div>
+          {aiTag ? (
+            <div className="bg-white/10 px-3 py-1 rounded-full text-[0.8rem] uppercase w-max font-medium mt-4 text-white">
+              ai-assisted
+            </div>
+          ) : null}
         </m.div>
       </m.div>
     </LazyMotion>

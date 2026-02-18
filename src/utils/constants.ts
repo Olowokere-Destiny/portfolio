@@ -1,5 +1,6 @@
 import fashionFusion from "../assets/images/fashion_fusion_screenshot.png";
 import paradiseView from "../assets/images/paradise_view_screenshot.png";
+import routify from "../assets/images/routify-screenshot.png";
 import htmlIcon from "../assets/images/html-icon.svg";
 import cssIcon from "../assets/images/css-icon.svg";
 import bootstrapIcon from "../assets/images/bootstrap-icon.svg";
@@ -56,6 +57,15 @@ export const projects = [
     image: paradiseView,
     liveUrl: "https://paradise-view-green.vercel.app",
     codeUrl: "https://github.com/Olowokere-Destiny/paradise-view",
+  },
+  {
+    title: "Routify",
+    description:
+      "A modern, real-time GPS route tracking and mapping application. Create, save, and manage routes with secure cloud sync and cross-device access.",
+    image: routify,
+    liveUrl: "https://routifygps.vercel.app",
+    codeUrl: "https://github.com/Olowokere-Destiny/routify",
+    aiTag: true,
   },
 ];
 

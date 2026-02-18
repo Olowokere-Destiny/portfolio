@@ -28,6 +28,7 @@ const Projects = () => {
           liveUrl={project.liveUrl}
           demoVideoUrl={project?.demoVideoUrl}
           hasDemoVideo={project?.hasVideoDemo}
+          aiTag={project?.aiTag}
         />
       ))}
     </section>
