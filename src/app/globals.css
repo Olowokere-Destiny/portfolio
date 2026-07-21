@@ -14,3 +14,6 @@
 .gradient {
   @apply bg-gradient-to-r from-cyan-400 to-blue-600 text-transparent bg-clip-text;
 }
+.bg-gradient {
+  @apply bg-gradient-to-r from-cyan-400 to-blue-600;
+}

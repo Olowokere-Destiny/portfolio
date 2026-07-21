@@ -1,10 +1,17 @@
 "use client";
 import Image, { StaticImageData } from "next/image";
-import { domAnimation, LazyMotion, m, useInView } from "framer-motion";
-import { useRef } from "react";
+import {
+  domAnimation,
+  LazyMotion,
+  m,
+  useInView,
+  Variants,
+} from "framer-motion";
+import { useRef, useState } from "react";
 import github from "../assets/images/github-logo.svg";
 import Link from "next/link";
 import { RxExternalLink } from "react-icons/rx";
+import { FiPlay } from "react-icons/fi";
 
 interface Props {
   image?: StaticImageData;
@@ -14,8 +21,9 @@ interface Props {
   liveUrl: string;
   hasDemoVideo?: boolean;
   demoVideoUrl?: string;
-  aiTag?: boolean;
+  demoPlaceholder?: StaticImageData;
 }
+
 const SingleProject = ({
   image,
   title,
@@ -24,24 +32,30 @@ const SingleProject = ({
   liveUrl,
   hasDemoVideo,
   demoVideoUrl,
-  aiTag,
+  demoPlaceholder,
 }: Props) => {
   const ref = useRef(null);
   const inView = useInView(ref, { margin: "-100px" });
+  const [isPlaying, setIsPlaying] = useState(false);
 
-  const variant = {
+  const variant: Variants = {
     initial: {
-      scale: 0.95,
+      y: 24,
       opacity: 0,
+      scale: 0.9,
     },
     animate: {
-      scale: 1,
+      y: 0,
       opacity: 1,
+      scale: 1,
       transition: {
-        duration: 0.5,
+        duration: 0.8,
+        ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
       },
     },
   };
+
+  const thumbnail = demoPlaceholder ?? image;
 
   return (
     <LazyMotion features={domAnimation} strict>
@@ -51,80 +65,109 @@ const SingleProject = ({
         animate={inView ? "animate" : "initial"}
         initial="initial"
         ref={ref}
-        className="w-full flex lg:flex-row flex-col gap-8 justify-center lg:justify-between items-center my-12 bg-white/10 p-4 rounded-3xl"
+        className="group w-full flex lg:flex-row flex-col gap-10 justify-center lg:justify-between items-center my-14"
       >
         <div className="w-full lg:w-1/2">
-          {hasDemoVideo && demoVideoUrl ? (
-            <div
-              data-testid="video-demo"
-              className="w-full h-full rounded-2xl overflow-hidden"
-            >
-              <video
-                controls
-                controlsList="nodownload"
-                playsInline
-                className="w-full h-full"
-              >
-                <source src={demoVideoUrl} type="video/mp4" />
-              </video>
+          <div className="relative rounded-2xl border border-white/10">
+            <div className="rounded-2xl bg-[#0B0F1A] overflow-hidden">
+              <div className="flex items-center gap-2 px-4 py-2.5 bg-white/[0.04] border-b border-white/[0.06]">
+                <span className="w-2.5 h-2.5 rounded-full bg-red-400/60" />
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-300/60" />
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400/60" />
+                <span className="ml-3 truncate text-[0.7rem] font-mono text-slate-400/80 tracking-tight">
+                  {liveUrl.replace("https://", "")}
+                </span>
+              </div>
+
+              <div className="relative h-[280px] bg-black/20">
+                {hasDemoVideo && demoVideoUrl && isPlaying ? (
+                  <video
+                    data-testid="video-demo"
+                    controls
+                    autoPlay
+                    controlsList="nodownload"
+                    preload="metadata"
+                    playsInline
+                    className="w-full h-full object-cover"
+                  >
+                    <source src={demoVideoUrl} type="video/mp4" />
+                  </video>
+                ) : hasDemoVideo && demoVideoUrl ? (
+                  <button
+                    type="button"
+                    data-testid="video-placeholder"
+                    onClick={() => setIsPlaying(true)}
+                    aria-label={`Play demo video for ${title}`}
+                    className="relative w-full h-full block"
+                  >
+                    {thumbnail && (
+                      <Image
+                        src={thumbnail}
+                        fill
+                        sizes="(min-width: 1024px) 50vw, 100vw"
+                        className="object-cover object-top"
+                        alt=""
+                      />
+                    )}
+                    <span className="absolute inset-0 bg-black/35 transition-colors duration-300 group-hover:bg-black/25" />
+                    <span className="absolute inset-0 flex items-center justify-center">
+                      <span className="flex items-center justify-center w-16 h-16 rounded-full bg-white/15 backdrop-blur-md border border-white/30 transition-transform duration-300 group-hover:scale-110">
+                        <FiPlay className="text-white text-2xl translate-x-[2px]" />
+                      </span>
+                    </span>
+                  </button>
+                ) : (
+                  thumbnail && (
+                    <div data-testid="photo-demo" className="w-full h-full">
+                      <Image
+                        src={thumbnail}
+                        fill
+                        sizes="(min-width: 1024px) 50vw, 100vw"
+                        className="object-cover object-top"
+                        alt="Project preview"
+                      />
+                    </div>
+                  )
+                )}
+              </div>
             </div>
-          ) : (
-            image && (
-              <Image
-                data-testid="photo-demo"
-                src={image}
-                width={500}
-                height={500}
-                className="w-full rounded-2xl"
-                alt="Project Image"
-              />
-            )
-          )}
+          </div>
         </div>
-        <m.div
-          className="w-full lg:w-1/2"
-          animate={inView ? "animate" : "initial"}
-          initial="initial"
-        >
-          <h1 className="gradient w-max text-[1.5rem] md:text-[1.8rem] lg:text-[2rem] font-[600]">
+
+        <div className="w-full lg:w-1/2">
+          <h1 className="gradient text-[1.6rem] md:text-[1.9rem] lg:text-[2.1rem] font-bold tracking-tight truncate">
             {title}
           </h1>
-          <p className="text-[1rem] text-slate-200 font-medium">
+          <p className="mt-2 text-[1rem] leading-relaxed text-slate-300/90 font-medium">
             {description}
           </p>
 
-          <div className="flex items-center gap-x-8 mt-3">
+          <div className="flex items-center gap-x-4 mt-5">
             <Link
-              href={codeUrl ? codeUrl : ""}
+              href={codeUrl || ""}
               target="_blank"
-              className="flex items-center gap-x-1 rounded-full text-[0.8rem] px-3 py-2 hover:bg-white/40 transition-[0.5] text-white bg-white/30"
+              className="flex items-center gap-x-2 rounded-full text-[0.8rem] font-medium px-4 py-2.5 border border-white/15 text-slate-200 bg-white/[0.03] hover:bg-white/10 hover:border-white/25 transition-colors duration-300"
             >
+              <Image
+                src={github}
+                width={100}
+                height={100}
+                alt=""
+                aria-hidden="true"
+                className="w-4 h-4"
+              />
               <span>View code</span>
-              <span>
-                <Image
-                  src={github}
-                  width={100}
-                  height={100}
-                  alt="github logo"
-                  className="w-4 h-4"
-                />
-              </span>
             </Link>
             <Link
               href={liveUrl}
               target="_blank"
-              className="flex items-center gap-x-1 rounded-full text-[0.8rem] px-3 py-2 hover:bg-red-400/90 transition-[0.5] text-white bg-red-400"
+              className="flex items-center gap-x-2 rounded-full text-[0.8rem] font-medium px-4 py-2.5 text-white bg-gradient"
             >
-              <span>Live Site</span>
+              <span>Live site</span>
               <RxExternalLink className="text-[1rem]" />
             </Link>
           </div>
-          {aiTag ? (
-            <div className="bg-white/10 px-3 py-1 rounded-full text-[0.8rem] uppercase w-max font-medium mt-4 text-white">
-              ai-assisted
-            </div>
-          ) : null}
-        </m.div>
+        </div>
       </m.div>
     </LazyMotion>
   );
