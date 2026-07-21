@@ -44,7 +44,7 @@ export const projects: SingleProjectProps[] = [
     liveUrl: "https://teem-work.onrender.com",
     codeUrl: "https://github.com/Olowokere-Destiny/teem",
     hasDemoVideo: true,
-    demoVideoUrl: "teem_demo.mp4",
+    demoVideoUrl: "/teem_demo.mp4",
     demoPlaceholder: teemCover,
   },
   {

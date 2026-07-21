@@ -19,16 +19,7 @@ const Projects = () => {
         A selection of projects I’ve brought to life.
       </p>
       {projects.map((project, index) => (
-        <SingleProject
-          key={index}
-          title={project.title}
-          image={project.image}
-          description={project.description}
-          codeUrl={project.codeUrl}
-          liveUrl={project.liveUrl}
-          demoVideoUrl={project?.demoVideoUrl}
-          hasDemoVideo={project?.hasVideoDemo}
-        />
+        <SingleProject key={index} {...project} />
       ))}
     </section>
   );
